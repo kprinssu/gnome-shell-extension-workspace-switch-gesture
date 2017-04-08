@@ -33,13 +33,6 @@ const WorkspaceStrip = new Lang.Class({
 
     global.stage.add_actor(this._actor);
 
-    this._overlayActor = new St.Widget({
-      style_class: "gesture-workspace-strip-overlay"
-    });
-    this._overlayActor.set_position(this._monitor.x, this._monitor.y);
-    this._overlayActor.set_size(this._monitor.width, this._monitor.height);
-    global.stage.add_actor(this._overlayActor);
-
     this._vertical = vertical;
     this._workspaces = this._fillWorkspaceData();
 
@@ -67,20 +60,12 @@ const WorkspaceStrip = new Lang.Class({
       this._sizeY = 0;
     }
 
-    this._hiddenChrome = []; 
+    this._hiddenChrome = [];
     Main.layoutManager._trackedActors.forEach(data => {
       if (data.trackFullscreen) {
         this._hiddenChrome.push(data.actor);
         data.actor.hide();
-/*      } else if (data.actor.visible && data.actor.get_parent() == Main.layoutManager.uiGroup) {
-        this._overlayActor.add_child(new Clutter.Clone({
-          source: data.actor,
-          x: data.actor.get_transformed_position()[0] - this._monitor.x,
-          y: data.actor.get_transformed_position()[1] - this._monitor.y,
-          width: data.actor.get_transformed_size()[0],
-          height: data.actor.get_transformed_size()[1]
-        }));
-*/      }
+      }
     });
 
     this._x = 0;
@@ -88,7 +73,6 @@ const WorkspaceStrip = new Lang.Class({
     this._scrollToWorkspace(this._origWorkspace);
 
     this._actor.set_clip(0, 0, this._monitor.width, this._monitor.height);
-    this._overlayActor.set_clip(0, 0, this._monitor.width, this._monitor.height);
   },
 
   _scrollToWorkspace: function(to) {
@@ -177,41 +161,7 @@ const WorkspaceStrip = new Lang.Class({
       x = this._sizeX;
     if (y > this._sizeY)
       y = this._sizeY;
-/*
-    let dim = this._vertical ? this._monitor.height : this._monitor.width;
-    let divWidth = 0;
-    if (this._vertical)
-      divWidth = Math.floor(BASE_DIVIDER_WIDTH * dim / BASE_HEIGHT);
-    else
-      divWidth = Math.floor(BASE_DIVIDER_WIDTH * dim / BASE_WIDTH);
-    if (this._vertical) {
-      if (y < divWidth) {
-        let overscroll = (divWidth - y) / divWidth;
-        overscroll = overscroll - overscroll * overscroll / 2;
 
-        y = divWidth - overscroll * divWidth;
-      }
-      if (y > this._sizeY - divWidth) {
-        let overscroll = (y - (this._sizeY - divWidth)) / divWidth;
-//        overscroll = 2 * overscroll - overscroll * overscroll;
-
-        y = this._sizeY - divWidth + overscroll * divWidth;
-      }
-    } else {
-      if (x < divWidth) {
-        let overscroll = (divWidth - x) / divWidth;
-//        overscroll = overscroll - overscroll * overscroll / 2;
-
-        x = divWidth - overscroll * divWidth;
-      }
-      if (x > this._sizeX - divWidth) {
-        let overscroll = (x - (this._sizeX - divWidth)) / divWidth;
-//        overscroll = 2 * overscroll - overscroll * overscroll;
-
-        x = this._sizeX - divWidth + overscroll * divWidth;
-      }
-    }
-*/
     // Round dx and dy so that the picture is always crisp
     x = Math.round(x);
     y = Math.round(y);
@@ -246,28 +196,6 @@ const WorkspaceStrip = new Lang.Class({
     return workspaces.map(ws => {
       return new WorkspaceClone.WorkspaceClone(ws, this._monitor);
     });
-
-/*
-    let ws = this._origWorkspace;
-    let dir = this._vertical ? Meta.MotionDirection.UP : Meta.MotionDirection.LEFT;
-
-    let next = ws.get_neighbor(dir);
-    while (next != ws) {
-      ws = next;
-      next = ws.get_neighbor(dir);
-    }
-
-    dir = this._vertical ? Meta.MotionDirection.DOWN : Meta.MotionDirection.RIGHT;
-    next = ws;
-    ws = null;
-    while (next != ws) {
-      ws = next;
-      next = ws.get_neighbor(dir);
-
-      workspaces.push(new WorkspaceClone.WorkspaceClone(ws, this._monitor));
-    }
-    return workspaces;
-*/
   },
 
   destroy: function(ws) {
@@ -287,13 +215,9 @@ const WorkspaceStrip = new Lang.Class({
     this._workspaces = null;
 
     global.stage.remove_actor(this._actor);
-    global.stage.remove_actor(this._overlayActor);
 
     this._actor.destroy();
     this._actor = null;
-
-    this._overlayActor.destroy();
-    this._overlayActor = null;
 
     this._monitor = null;
     this._monitorIndex = null;
