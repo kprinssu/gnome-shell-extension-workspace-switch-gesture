@@ -1,7 +1,0 @@
-function start() {
-  
-}
-
-function end() {
-
-}

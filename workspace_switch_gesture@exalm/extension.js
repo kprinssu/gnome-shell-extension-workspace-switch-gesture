@@ -8,9 +8,7 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Ext = ExtensionUtils.getCurrentExtension();
 
 const Gesture = Ext.imports.gesture;
-const SwitchAnimation = Ext.imports.switchAnimation;
 const X11GestureListener = Ext.imports.x11GestureListener;
-const WorkspaceTracker = Ext.imports.workspaceTracker;
 
 let _gesture;
 
@@ -25,9 +23,6 @@ function enable() {
     global.stage.connect('captured-event', Lang.bind(_gesture, _gesture._handleEvent));
   else
     X11GestureListener.start(Lang.bind(_gesture, _gesture._handleEvent));
-
-//  SwitchAnimation.hook();
-//  WorkspaceTracker.start();
 }
 
 function disable() {
@@ -37,7 +32,5 @@ function disable() {
     X11GestureListener.stop();
 
   _gesture = null;
-//  SwitchAnimation.unhook();
-//  WorkspaceTracker.stop();
 }
 
