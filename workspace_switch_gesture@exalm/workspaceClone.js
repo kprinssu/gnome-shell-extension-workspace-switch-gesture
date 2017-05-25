@@ -1,4 +1,3 @@
-const Background = imports.ui.background;
 const Clutter = imports.gi.Clutter;
 const Lang = imports.lang;
 const Main = imports.ui.main;

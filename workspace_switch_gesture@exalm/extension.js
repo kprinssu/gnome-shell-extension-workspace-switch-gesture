@@ -1,8 +1,6 @@
 const Lang = imports.lang;
 const Main = imports.ui.main;
 const Meta = imports.gi.Meta;
-const Shell = imports.gi.Shell;
-const Signals = imports.signals;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Ext = ExtensionUtils.getCurrentExtension();
