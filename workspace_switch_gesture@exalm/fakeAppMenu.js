@@ -38,7 +38,7 @@ const FakeAppMenuButton = new Lang.Class({
     this._arrow = PopupMenu.arrowIcon(St.Side.BOTTOM);
     this._container.add_actor(this._arrow);
 
-    if (this._targetApp == null || !Gtk.Settings.get_default().gtk_shell_shows_app_menu || Main.panel.statusArea.appMenu.container.get_parent() == null)
+    if (!Gtk.Settings.get_default().gtk_shell_shows_app_menu || Main.panel.statusArea.appMenu.container.get_parent() == null)
       this.actor.hide();
 
     this._stop = true;
