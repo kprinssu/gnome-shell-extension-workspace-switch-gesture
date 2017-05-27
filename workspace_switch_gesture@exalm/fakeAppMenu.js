@@ -15,37 +15,43 @@ const FakeAppMenuButton = new Lang.Class({
 
   _init: function(app, cont) {
     this.parent();
+    this._targetApp = app;
+
     // A workaround for themes
     this.container.set_name("panel");
 
-    this._targetApp = app;
+    let box = new St.BoxLayout({
+        style_class: 'panel-status-menu-box'
+    });
 
-    let bin = new St.Bin({ name: 'appMenu' });
-    this.actor.add_actor(bin);
+    // icon
+    let icon_size = Panel.PANEL_ICON_SIZE - Panel.APP_MENU_ICON_MARGIN;
+    box.add_actor(new St.Bin({
+        style_class: 'app-menu-icon',
+        child: app.create_icon_texture(icon_size)
+    }));
+
+    // label
+    box.add_actor(new St.Label({
+        y_expand: true,
+        y_align: Clutter.ActorAlign.CENTER,
+        text: this._targetApp.get_name()
+    }));
+
+    // arrow
+    box.add_actor(PopupMenu.arrowIcon(St.Side.BOTTOM));
+
+    this.actor.add_actor(new St.Bin({
+        name: 'appMenu',
+        child: box
+    }));
+
+    cont.add_child(this.container);
+
     this.actor.set_accessible_name(this._targetApp.get_name());
-
-    this._container = new St.BoxLayout({ style_class: 'panel-status-menu-box' });
-    bin.set_child(this._container);
-
-    this._iconBox = new St.Bin({ style_class: 'app-menu-icon' });
-    this._container.add_actor(this._iconBox);
-
-    this._label = new St.Label({ y_expand: true,
-                                 y_align: Clutter.ActorAlign.CENTER });
-    this._label.set_text(this._targetApp.get_name());
-    this._container.add_actor(this._label);
-
-    this._arrow = PopupMenu.arrowIcon(St.Side.BOTTOM);
-    this._container.add_actor(this._arrow);
 
     if (!Gtk.Settings.get_default().gtk_shell_shows_app_menu || Main.panel.statusArea.appMenu.container.get_parent() == null)
       this.actor.hide();
-
-    this._stop = true;
-
-    this._syncIcon();
-
-    cont.add_child(this.container);
 
     let parent = Main.panel.statusArea.appMenu.container;
     let [x,y] = parent.get_position();
@@ -53,16 +59,8 @@ const FakeAppMenuButton = new Lang.Class({
     let hpadding = Main.panel.statusArea.appMenu.actor.get_theme_node().get_length("-natural-hpadding");
     x -= hpadding;
     this.container.set_position(x, y);
-    if (this._container.width > max_width)
-        this._container.width = max_width;
-  },
-
-  _syncIcon: function() {
-    if (!this._targetApp)
-      return;
-
-    let icon = this._targetApp.create_icon_texture(Panel.PANEL_ICON_SIZE - Panel.APP_MENU_ICON_MARGIN);
-    this._iconBox.set_child(icon);
+    if (box.width > max_width)
+        box.width = max_width;
   },
 
   destroy: function() {
@@ -70,4 +68,3 @@ const FakeAppMenuButton = new Lang.Class({
     this.actor._delegate = null;
   }
 });
-
