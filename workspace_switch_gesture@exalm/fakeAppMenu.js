@@ -47,10 +47,14 @@ const FakeAppMenuButton = new Lang.Class({
 
     cont.add_child(this.container);
 
-    let [x,y] = Main.panel.statusArea.appMenu.actor.get_parent().get_position();
-    let hp = Main.panel.statusArea.appMenu.actor.get_theme_node().get_length("-natural-hpadding");
-    x -= hp;
+    let parent = Main.panel.statusArea.appMenu.container;
+    let [x,y] = parent.get_position();
+    let max_width = parent.get_parent().get_next_sibling().x - x;
+    let hpadding = Main.panel.statusArea.appMenu.actor.get_theme_node().get_length("-natural-hpadding");
+    x -= hpadding;
     this.container.set_position(x, y);
+    if (this._container.width > max_width)
+        this._container.width = max_width;
   },
 
   _syncIcon: function() {
