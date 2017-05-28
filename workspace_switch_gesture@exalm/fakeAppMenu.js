@@ -55,12 +55,9 @@ const FakeAppMenuButton = new Lang.Class({
 
     let parent = Main.panel.statusArea.appMenu.container;
     let [x,y] = parent.get_position();
-    let max_width = parent.get_parent().get_next_sibling().x - x;
     let hpadding = Main.panel.statusArea.appMenu.actor.get_theme_node().get_length("-natural-hpadding");
     x -= hpadding;
     this.container.set_position(x, y);
-    if (box.width > max_width)
-        box.width = max_width;
   },
 
   destroy: function() {
