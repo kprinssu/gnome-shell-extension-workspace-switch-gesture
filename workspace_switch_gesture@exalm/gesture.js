@@ -56,8 +56,9 @@ const TouchpadWorkspaceSwitchAction = new Lang.Class({
         return Clutter.EVENT_PROPAGATE;
 
       let cancel = event.get_gesture_phase() == Clutter.TouchpadGesturePhase.CANCEL;
+
       if (event.get_gesture_phase() == Clutter.TouchpadGesturePhase.END || cancel) {
-        this._endGesture(cancel);
+        this._endGesture(cancel, event.get_time());
 
         return Clutter.EVENT_STOP;
       }
@@ -90,7 +91,7 @@ const TouchpadWorkspaceSwitchAction = new Lang.Class({
     }
   },
 
-  _endGesture: function(cancel) {
+  _endGesture: function(cancel, time) {
     this._strips.forEach(strip => {
       strip.endGesture(ws => {
         let primary = strip._monitor.index == global.screen.get_primary_monitor();
@@ -100,7 +101,7 @@ const TouchpadWorkspaceSwitchAction = new Lang.Class({
           Main.panel.statusArea.appMenu.actor.opacity = 255;
           if (this._origWs != ws) {
             Main.wm._blockAnimations = true;
-            ws.activate(global.get_current_time());
+            ws.activate(time);
             Main.wm._blockAnimations = false;
           }
         }
