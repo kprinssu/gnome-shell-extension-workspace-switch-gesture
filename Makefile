@@ -1,7 +1,8 @@
 NAME=workspace_switch_gesture@exalm
 INSTALL_PATH=~/.local/share/gnome-shell/extensions
 
-$(NAME).zip:
+$(NAME).zip: $(NAME)
+	rm -rf $(NAME).zip
 	zip $(NAME).zip $(NAME) -r
 
 install:
