@@ -8,6 +8,7 @@ const St = imports.gi.St;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Ext = ExtensionUtils.getCurrentExtension();
 const FakeAppMenu = Ext.imports.fakeAppMenu;
+const PanelClone = Ext.imports.panelClone;
 
 const WindowClone = new Lang.Class({
   Name: 'WindowClone',
@@ -96,18 +97,13 @@ const WorkspaceClone = new Lang.Class({
     // FIXME: Do we have to distinguish these ones and windows
     this._panels = [];
     if (!this.fullscreen) {
-      Main.layoutManager._trackedActors.forEach(data => {
-        if (data.trackFullscreen) {
-          [anchorX, anchorY] = data.actor.get_anchor_point();
-          let clone = new Clutter.Clone({
-            source: data.actor,
-            x: data.actor.x - this._monitor.x,
-            y: data.actor.y - this._monitor.y
-          });
-          this._container.add_child(clone);
-          clone.set_anchor_point(anchorX, anchorY);
-          this._panels.push(clone);
-        }
+      let panels = Main.layoutManager._trackedActors.filter(data => {
+          return data.trackFullscreen;
+      });
+      panels.forEach(data => {
+        let clone = new PanelClone.PanelClone(data.actor, this._monitor);
+        this._container.add_child(clone._clone);
+        this._panels.push(clone);
       });
 
       if (this._monitor.index == global.screen.get_primary_monitor()) {
