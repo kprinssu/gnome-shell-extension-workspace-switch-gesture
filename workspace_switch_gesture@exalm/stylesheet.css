@@ -1,3 +1,7 @@
+#panel.fake {
+  background: none;
+}
+
 .gesture-workspace-strip {
   background: #2e3436 url(resource:///org/gnome/shell/theme/noise-texture.png);
   background-repeat: repeat;
