@@ -78,8 +78,10 @@ const WorkspaceClone = new Lang.Class({
       return window.located_on_workspace(this.workspace) &&
              window.showing_on_its_workspace() &&
              window.get_window_type() != Meta.WindowType.OVERRIDE_OTHER;
+    }).sort((a, b) => {
+        return a.get_meta_window().get_layer()
+            - b.get_meta_window().get_layer();
     });
-    // TODO: Support desktop windows
 
     // Add all windows to our workspace
     wins.forEach(actor => {
