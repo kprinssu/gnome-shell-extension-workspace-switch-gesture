@@ -20,6 +20,8 @@ const FakeAppMenuButton = new Lang.Class({
     // A workaround for themes
     this.container.set_name("panel");
     this.container.add_style_class_name("fake");
+    if (Main.panel.actor.get_style_class_name () == "solid")
+        this.container.add_style_class_name("solid");
 
     let box = new St.BoxLayout({
         style_class: 'panel-status-menu-box'
