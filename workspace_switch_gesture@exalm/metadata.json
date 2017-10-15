@@ -2,6 +2,6 @@
   "uuid": "workspace_switch_gesture@exalm",
   "name": "Workspace Switch Gesture",
   "description": "macOS-like workspace switching",
-  "shell-version": ["3.20", "3.22", "3.24"]
+  "shell-version": ["3.20", "3.22", "3.24", "3.26"]
 }
 
