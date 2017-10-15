@@ -40,7 +40,7 @@ const TouchpadWorkspaceSwitchAction = new Lang.Class({
       if (Main.actionMode != Shell.ActionMode.NONE)
         return Clutter.EVENT_PROPAGATE;
 
-      let [dx, dy] = event.get_gesture_motion_delta(event);
+      let [dx, dy] = event.get_gesture_motion_delta();
       if (!NATURAL_SCROLLING) {
         dx = -dx;
         dy = -dy;
